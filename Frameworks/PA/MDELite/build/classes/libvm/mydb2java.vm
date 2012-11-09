@@ -1,0 +1,40 @@
+## SET VARIABLES ########################
+#set($MARKER="//----")
+##
+#foreach($class in $classS)
+${MARKER}outputs/toJava/${class.name.replace("'","")}.java
+## FOR CURRENT CLASS, GET NUMBER OF ATTRIBUTES ####################
+#set($attrSize=0)
+#foreach($attr in $attributeS)
+#if(${attr.cid} == ${class.cid})
+#set($attrSize=$attrSize + 1)
+#end
+#end
+#set($count1=1)
+## DECLARE THE CLASS AND ATTRIBUTES ##############################
+public class ${class.name.replace("'","")} {
+
+#foreach($attr in $attributeS)
+#if(${attr.cid} == ${class.cid})
+	${attr.visibility.replace("'","")} ${attr.static.replace("'","")} ${attr.typeName.replace("'","")} ${attr.name.replace("'","")};
+#end
+#end
+## BUILD THE CLASS METHODS #########################
+
+#foreach($method in $methodS)
+#if(${method.cid} == ${class.cid})
+#set($params=0)
+#set($count1=1)
+#foreach($parameter in $parameterS)
+#if(${parameter.mid} == ${method.mid})
+#set($params=$params + 1)
+#end
+#end
+	${method.visibility.replace("'","")} ${method.static.replace("'","")} ${method.returnTypeName.replace("'","")} ${method.name.replace("'","")}(#foreach($parameter in $parameterS)#if(${parameter.mid} == ${method.mid})#if($count1 < $params)${parameter.typeName.replace("'","")} p$count1, #else${parameter.typeName.replace("'","")} p$count1 #end #set($count1=$count1 + 1)#end#end) {
+		// Fill in method implementation details
+	}
+
+#end
+#end
+}
+#end
